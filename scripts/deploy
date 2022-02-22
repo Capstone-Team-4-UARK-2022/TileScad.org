@@ -26,10 +26,10 @@ sudo apt install nginx
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    include snippets/self-signed.conf;
-    include snippets/ssl-params.conf;
-
     server_name tilescad.org;
+    ssl_certificate /etc/letsencrypt/live/tilescad.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/tilescad.org/privkey.pem;
+
     location / {
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header Upgrade $http_upgrade;
