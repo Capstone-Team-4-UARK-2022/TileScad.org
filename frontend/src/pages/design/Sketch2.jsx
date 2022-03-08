@@ -2,6 +2,10 @@ import React, { createRef } from "react";
 import Sketch from "react-p5";
 import { uploadDesign } from "../../APIService";
 
+let dim = 800;
+let num = 32;
+let tiles = [];
+
 class Tile {
   constructor(x, y, s) {
     this.x = x;
@@ -56,9 +60,22 @@ export default (props) => {
       }
     }
 
+    // if (p5.mouseIsPressed) {
+    //   for (let i = 0; i < tiles.length; i++) {
+    //     tiles[i].clicked(p5.mouseX, p5.mouseY);
+    //   }
+    // }
+
     // NOTE: Do not use setState in the draw function or in functions that are executed
     // in the draw function...
     // please use normal variables or class properties for these purposes
+  };
+
+  const mouseDragged = (event) => {
+    console.log(event);
+    for (let i = 0; i < tiles.length; i++) {
+      tiles[i].clicked(event.mouseX, event.mouseY);
+    }
   };
 
   const mousePressed = (event) => {
@@ -71,6 +88,38 @@ export default (props) => {
       tiles[y][x].clicked();
     }
   };
+
+    show() {
+      this.p.stroke(10);
+      this.p.fill(this.c);
+      this.p.rectMode(this.p.CENTER);
+      this.p.square(this.x, this.y, this.s);
+    }
+
+    clicked(mX, mY) {
+      console.log(mX);
+      console.log(mY);
+      let d = this.p.dist(mX, mY, this.x, this.y);
+      console.log(d);
+      if (d < this.s / 2) {
+        if (this.bool == false) {
+          this.c = 10;
+          this.bool = true;
+        } else {
+          this.c = 230;
+          this.bool = false;
+        }
+      }
+    }
+  }
+
+//   return (
+//     <Sketch
+//       setup={setup}
+//       draw={draw}
+//       mousePressed={mousePressed}
+//       mouseDragged={mouseDragged}
+//     />
 
   return (
     <div class="row">
