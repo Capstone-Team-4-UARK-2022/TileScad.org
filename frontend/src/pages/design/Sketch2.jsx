@@ -1,8 +1,9 @@
 import React from "react";
+import createUtilityClassName from "react-bootstrap/esm/createUtilityClasses";
 import Sketch from "react-p5";
 
 let dim = 800;
-let num = 16;
+let num = 32;
 let tiles = [];
 
 export default (props) => {
@@ -31,9 +32,22 @@ export default (props) => {
       tiles[i].show();
     }
 
+    // if (p5.mouseIsPressed) {
+    //   for (let i = 0; i < tiles.length; i++) {
+    //     tiles[i].clicked(p5.mouseX, p5.mouseY);
+    //   }
+    // }
+
     // NOTE: Do not use setState in the draw function or in functions that are executed
     // in the draw function...
     // please use normal variables or class properties for these purposes
+  };
+
+  const mouseDragged = (event) => {
+    console.log(event);
+    for (let i = 0; i < tiles.length; i++) {
+      tiles[i].clicked(event.mouseX, event.mouseY);
+    }
   };
 
   const mousePressed = (event) => {
@@ -77,5 +91,12 @@ export default (props) => {
     }
   }
 
-  return <Sketch setup={setup} draw={draw} mousePressed={mousePressed} />;
+  return (
+    <Sketch
+      setup={setup}
+      draw={draw}
+      mousePressed={mousePressed}
+      mouseDragged={mouseDragged}
+    />
+  );
 };

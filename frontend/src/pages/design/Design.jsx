@@ -14,6 +14,9 @@ function Design() {
               <h1>Settings</h1>
             </div> */}
             <div class="col">
+              <h1>SETTINGS</h1>
+            </div>
+            <div class="col">
               <Sketch />
             </div>
           </div>
