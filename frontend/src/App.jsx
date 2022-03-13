@@ -6,7 +6,6 @@ import Navigation from "./pages/BarNav";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DesignPage from "../src/pages/design/Design";
 import AboutPage from "../src/pages/about/About";
-import UploadPage from "../src/pages/upload/Upload";
 
 export default () => {
   return (

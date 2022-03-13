@@ -1,41 +1,56 @@
-import React from "react";
+import { Card } from "@mui/material";
+import React, { useState } from "react";
+import Tile from "./Tile";
 
-function Tile({ label, color, onClick }) {
-  return (
-    <div
-      style={{
-        width: 50,
-        height: 50,
-        backgroundColor: color,
-      }}
-      onClick={onClick}
-    >
-      {label}
-    </div>
-  );
-}
-
-function TileCanvas({ gridData, onClick }) {
+export default ({
+  gridData,
+  onClick,
+  width,
+  height,
+  tileSize,
+  tileTypes,
+  activeTileType,
+}) => {
   //gridData [[{ lable, color, }]]
   // onClick = (rowNum, colNum) => {}
-  return gridData.map((row, i) => {
-    return (
-      <div style={{ display: "flex" }}>
-        {row.map((tile, j) => {
-          const { label = "", color = "white" } = tile || {};
-          return (
-            <Tile
-              label={label}
-              color={color}
-              onClick={() => {
-                onClick(i, j);
-              }}
-            />
-          );
-        })}
-      </div>
-    );
-  });
-}
+  // width, height are in terms of tiles
 
-export default TileCanvas;
+  return (
+    <Card
+      style={{
+        display: "flex",
+        padding: 10,
+        justifyContent: "space-between",
+        flexDirection: "column",
+        border: "1px solid #b8b8b8",
+      }}
+    >
+      {gridData.slice(0, height).map((row, i) => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              height: tileSize,
+              overflow: "hidden",
+            }}
+          >
+            {row.slice(0, width).map((tile, j) => {
+              return (
+                <Tile
+                  width={tileSize}
+                  activeTileType={activeTileType}
+                  data={!isNaN(tile) ? tileTypes[tile] : null}
+                  onClick={() => {
+                    onClick(i, j);
+                  }}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
+    </Card>
+  );
+};
