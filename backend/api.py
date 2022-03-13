@@ -1,5 +1,5 @@
 import sys
-from .tilescad.DrawCanvasDebug import draw_flattish_canvas
+# from .tilescad.DrawCanvasDebug import draw_flattish_canvas
 from flask import Blueprint, send_from_directory, request
 from .util import get_current_time_ms, mkdir
 
