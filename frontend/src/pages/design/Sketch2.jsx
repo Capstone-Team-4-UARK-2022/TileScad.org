@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import React, { createRef, useState } from "react";
+=======
+import React from "react";
+>>>>>>> Stashed changes
 import Sketch from "react-p5";
 import { Form, Button } from "react-bootstrap";
 import { uploadDesign } from "../../APIService";
