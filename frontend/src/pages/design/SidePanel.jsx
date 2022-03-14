@@ -65,7 +65,7 @@ export default ({
               onUpload()
                 .then((filename) => {
                   if (filename) {
-                    console.log(filename);
+                    // console.log(filename);
                     filenameInput.current.setAttribute("value", filename);
                     hiddenForm.current.submit();
                   }
@@ -132,16 +132,6 @@ export default ({
                 }}
                 selected={activeTileType == i}
                 onChange={(newValues) => {
-                  console.log("on change", newValues);
-                  console.log(
-                    tileTypes.map((oldTileType, j) => {
-                      if (i == j) {
-                        return newValues;
-                      } else {
-                        return oldTileType;
-                      }
-                    })
-                  );
                   setTileTypes(
                     tileTypes.map((oldTileType, j) => {
                       if (i == j) {

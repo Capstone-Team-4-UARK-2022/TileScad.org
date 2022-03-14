@@ -148,7 +148,8 @@ export default () => {
 
   // const tileSize = getTileSize();
   const tileSize = getTileSize(gridDim);
-  console.log(tileSize, "tileSize");
+  // console.log(tileSize, "tileSize");
+  // console.log(tileSize, "tileSize");
 
   return (
     <div>
