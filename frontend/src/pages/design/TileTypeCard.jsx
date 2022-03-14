@@ -1,16 +1,17 @@
 import React from "react";
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, Typography, Collapse } from "@mui/material";
 import EditableField from "./EditableField";
 
 // const PaddedBox = ({ children }) => {
 //   return <Box style={{ padding: "15px 0px" }}>{children}</Box>;
 // };
 
-import ColorPicker from "material-ui-color-picker";
+// import ColorPicker from "material-ui-color-picker";
+import Colors from "./Colors";
 
 // export default ({ title, labels, values, onChange }) => {
 export default ({ tileType, onChange, onClick, selected = false }) => {
-  const { name, domainLength, color } = tileType || {};
+  const { name, color, coreLength } = tileType || {};
   // values must be primitives
   // labels is {key: label}
   // values is {key: value}
@@ -22,43 +23,55 @@ export default ({ tileType, onChange, onClick, selected = false }) => {
     <Card
       style={{
         width: "100%",
-        padding: "20px 0px",
-        overflow: "visible",
-        border: selected ? "1px solid blue" : undefined,
+        padding: "10px 0px",
+        // overflow: "visible",
+        border: selected ? "2px solid " + Colors.BLUE : undefined,
       }}
-      onClick={onClick}
     >
       <div
         style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "center",
+          padding: "0px 15px",
+          cursor: "pointer",
         }}
+        onClick={onClick}
       >
-        <EditableField
-          label={"Name"}
-          value={name}
-          onChange={(newValue) => {
-            onChange({ ...tileType, name: newValue });
+        <Typography variant={"h5"}>{"Tile " + name}</Typography>
+      </div>
+      {/* <Collapse in={selected} timeout="auto" unmountOnExit> */}
+      <Collapse in={selected} timeout="auto">
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
-        />
-        <EditableField
-          label={"Domain Length"}
-          value={domainLength}
-          onChange={(newValue) => {
-            onChange({ ...tileType, domainLength: newValue });
-          }}
-        />
-        <EditableField
-          label={"Color"}
-          value={color}
-          onChange={(newValue) => {
-            onChange({ ...tileType, color: newValue });
-          }}
-        />
-        {/* <ColorPicker
+        >
+          <EditableField
+            label={"Name"}
+            value={name}
+            onChange={(newValue) => {
+              onChange({ ...tileType, name: newValue });
+            }}
+          />
+          <EditableField
+            label={"Core Length"}
+            value={coreLength}
+            onChange={(newValue) => {
+              if (!isNaN(newValue) && newValue != null) {
+                onChange({ ...tileType, coreLength: parseInt(newValue) });
+              }
+            }}
+          />
+          <EditableField
+            label={"Color"}
+            value={color}
+            onChange={(newValue) => {
+              onChange({ ...tileType, color: newValue });
+            }}
+          />
+          {/* <ColorPicker
           name={"Color"}
           defaultValue={color}
           // value={this.state.color} - for controlled component
@@ -68,7 +81,8 @@ export default ({ tileType, onChange, onClick, selected = false }) => {
             onChange({ ...tileType, color: newValue });
           }}
         /> */}
-      </div>
+        </div>
+      </Collapse>
     </Card>
   ) : (
     ""

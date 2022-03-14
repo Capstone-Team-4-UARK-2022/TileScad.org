@@ -1,18 +1,28 @@
-import React, { createRef, useState, useRef, useEffect } from "react";
-import { Button, styled, Typography, Card } from "@mui/material";
+import React, { useState } from "react";
+import { Alert, Snackbar, Typography } from "@mui/material";
 import TileCanvas from "./TileCanvas";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import COLORS from "./Colors";
 import SidePanel from "./SidePanel";
+import { uploadDesign } from "../../APIService";
 
 const defaultTileTypes = [
   {
     name: "A",
-    color: COLORS.TILE_TYPES.RED,
-    domainLength: 6,
+    color: Object.values(COLORS.TILE_TYPES)[0],
+    // naco: 30,
+    // saco: 32,
+    coreLength: 10,
   },
-  { name: "B", color: COLORS.TILE_TYPES.BLUE, domainLength: 6 },
-  { name: "C", color: COLORS.TILE_TYPES.GREEN, domainLength: 6 },
+  {
+    name: "B",
+    color: Object.values(COLORS.TILE_TYPES)[1],
+    // naco: 31,
+    // saco: 33,
+    coreLength: 0,
+  },
+  // { name: "B", color: COLORS.TILE_TYPES.BLUE },
+  // { name: "C", color: COLORS.TILE_TYPES.GREEN },
 ];
 
 defaultTileTypes.forEach((type, i) => {
@@ -22,13 +32,25 @@ defaultTileTypes.forEach((type, i) => {
 
 const defaultGridData = [...Array(16)].map((_, i) => {
   return [
-    defaultTileTypes[1].id,
-    defaultTileTypes[2].id,
+    // defaultTileTypes[1].id,
+    // defaultTileTypes[2].id,
 
     ...[...Array(14)].map((_, i) => {}),
   ];
 });
 
+const alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
+const numberToLetter = (i) => {
+  return alphabet[i % alphabet.length];
+};
+
+const randInt = (max) => {
+  return Math.floor(Math.random() * max);
+};
+
+const selectRandom = (arr) => {
+  return arr[randInt(arr.length)];
+};
 const defaultActiveTileType = defaultTileTypes[0].id;
 
 const getTileSize = (gridDim) => {
@@ -62,14 +84,54 @@ const getTileSize = (gridDim) => {
   return Math.min(Math.max(Math.floor((width * 0.4) / gridDim), 50), 100);
 };
 
-export default () => {
-  const [gridData, setGridData] = useState(defaultGridData);
+const dataIsValid = ({ grid, tileTypes }) => {
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid.length; j++) {
+      // check north west neighbor of each tile
+      if (j > 0 && i > 1) {
+        const selfId = grid[i][j];
+        const northWestId = grid[i - 1][j - 1];
+        if (
+          !isNaN(selfId) &&
+          selfId != null &&
+          !isNaN(northWestId) &&
+          northWestId != null
+        ) {
+          const tile = tileTypes[selfId];
+          const northWestNeighbor = tileTypes[northWestId];
+          if (tile.coreLength != northWestNeighbor.coreLength) return false;
+        }
+      }
+    }
+  }
+  return true;
+};
 
+export default () => {
+  const [domainLength, setDomainLength] = useState(6);
   // either id (number) or null
   const [activeTileType, setActiveTileType] = useState(defaultActiveTileType);
 
   const [tileTypes, setTileTypes] = useState(defaultTileTypes);
+
   const [gridDim, setGridDim] = useState(10);
+
+  const [gridData, setGridData] = useState(
+    [...Array(gridDim)].map((_, i) => {
+      return [...Array(gridDim)].map((_, j) => {
+        if (0 <= i && i < 2 && 0 <= j && j < 2) return tileTypes[0].id;
+      });
+    })
+  );
+
+  const [error, setError] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setError(false);
+  };
 
   const updateGrid = (rowIndex, colIndex) => {
     const newData = gridData.map((row, i) => {
@@ -127,11 +189,70 @@ export default () => {
             style={{
               padding: 15,
               flexGrow: 1,
-              minWidth: 250,
+              minWidth: 350,
               maxWidth: 400,
             }}
           >
             <SidePanel
+              onAdd={() => {
+                const numTypes = tileTypes.length;
+                const colors = Object.values(COLORS.TILE_TYPES);
+                setTileTypes(
+                  tileTypes.concat({
+                    id: numTypes,
+                    name: numberToLetter(numTypes),
+                    color: colors[numTypes % colors.length],
+                    coreLength: 0,
+                  })
+                );
+                setActiveTileType(numTypes);
+              }}
+              onUpload={() => {
+                // upload data to API, return promise with filename
+                const data = {
+                  // square grid of tile ids or null
+                  grid: gridData.slice(0, gridDim).map((row) => {
+                    return row.slice(0, gridDim).map((tileID) => {
+                      return isNaN(tileID) || tileID == null
+                        ? undefined
+                        : tileID;
+                    });
+                  }),
+                  domainLength,
+                  tileTypes, // array[id] = tile
+                };
+
+                if (dataIsValid(data)) {
+                  return uploadDesign(data);
+                } else {
+                  setError(true);
+                  return Promise.reject();
+                }
+              }}
+              domainLength={domainLength}
+              setDomainLength={setDomainLength}
+              gridDim={gridDim}
+              setGridDim={(x) => {
+                const value = parseInt(x);
+                if (value > 25) return;
+
+                const expansion = value - gridData.length;
+                if (expansion > 0) {
+                  // expand gridData if needed
+                  const newGD = gridData.map((row) => {
+                    return row.concat([...Array(expansion)]);
+                  });
+                  newGD.push(
+                    ...[...Array(expansion)].map(() => {
+                      return [...Array(value)];
+                    })
+                  );
+
+                  // console.log(newGD);
+                  setGridData(newGD);
+                }
+                if (value >= 5) setGridDim(value);
+              }}
               gridData={gridData}
               tileTypes={tileTypes}
               setTileTypes={setTileTypes}
@@ -140,6 +261,11 @@ export default () => {
             />
           </div>
         </div>
+        <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            All north east neighbors must have same core length
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );

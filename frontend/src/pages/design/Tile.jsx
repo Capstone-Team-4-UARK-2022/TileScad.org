@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 
 export default ({ width, data, onClick, activeTileType }) => {
-  const [display, seDisplay] = useState("none");
+  const [display, setDisplay] = useState("none");
   // size is number of tiles in each grid dimension
   const { name, color } = data || {};
 
@@ -29,14 +29,14 @@ export default ({ width, data, onClick, activeTileType }) => {
         filled
           ? undefined
           : (e) => {
-              seDisplay("flex");
+              setDisplay("flex");
             }
       }
       onMouseLeave={
         filled
           ? undefined
           : (e) => {
-              seDisplay("none");
+              setDisplay("none");
             }
       }
     >

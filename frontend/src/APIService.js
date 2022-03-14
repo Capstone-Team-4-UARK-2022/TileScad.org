@@ -3,10 +3,8 @@ const http = require("http");
 
 const useHTTPS = false;
 
-exports.uploadDesign = (tiles) => {
-  const postData = JSON.stringify({
-    tiles,
-  });
+exports.uploadDesign = (data) => {
+  const postData = JSON.stringify(data);
 
   const options = {
     // port: useHTTPS ? 443 : 80,
@@ -22,16 +20,20 @@ exports.uploadDesign = (tiles) => {
 
   return new Promise((resolve, reject) => {
     const request = client.request(options, (res) => {
-      console.log("statusCode:", res.statusCode);
-      console.log("headers:", res.headers);
+      // console.log("statusCode:", res.statusCode);
+      // console.log("headers:", res.headers);
+
+      if (res.statusCode != 200) reject(res.statusCode);
 
       res.on("data", (d) => {
-        console.log(d);
+        // console.log("d");
+        // console.log(d);
         resolve(d);
       });
     });
 
     request.on("error", (e) => {
+      // console.error("e");
       console.error(e);
       reject(e);
     });
