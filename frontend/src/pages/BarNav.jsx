@@ -12,7 +12,12 @@ function BarNav() {
         sticky="top"
         expand="sm"
         collapseOnSelect
-        style={{ padding: "10px 20px", borderBottom: "1px solid gray" }}
+        style={{
+          padding: "10px 20px",
+          // borderBottom: "1px solid gray",
+          boxShadow: "0px 1px 5px gray",
+          backgroundColor: "#ffffff82",
+        }}
       >
         <Navbar.Brand>
           <img src={logo} width="40px" height="40px" /> TileScad
