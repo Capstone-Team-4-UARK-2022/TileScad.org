@@ -5,8 +5,7 @@ import Navigation from "../BarNav";
 function About() {
   return (
     <div className="About">
-      <Navigation />
-      <div className="content">This is a content.</div>
+      <div className="content">About us!</div>
     </div>
   );
 }

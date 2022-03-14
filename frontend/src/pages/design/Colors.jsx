@@ -9,6 +9,7 @@ export default {
   WHITE: "#FFF",
   GRAY: "#777",
   LIGHT_GRAY: "#999",
+  BACKGROUND_COLOR: "rgb(242,242,242)",
   TILE_TYPES: {
     RED: theme.palette.error.light,
     BLUE: theme.palette.primary.light,

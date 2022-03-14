@@ -7,11 +7,12 @@ function BarNav() {
   return (
     <div className="Navigation">
       <Navbar
-        bg="light"
+        // bg="light"
         variant="light"
         sticky="top"
         expand="sm"
         collapseOnSelect
+        style={{ padding: "10px 20px", borderBottom: "1px solid gray" }}
       >
         <Navbar.Brand>
           <img src={logo} width="40px" height="40px" /> TileScad
@@ -21,7 +22,6 @@ function BarNav() {
         <Navbar.Collapse>
           <Nav>
             <Nav.Link href="design">Design</Nav.Link>
-            <Nav.Link href="upload">Upload</Nav.Link>
             <Nav.Link href="about">About</Nav.Link>
           </Nav>
         </Navbar.Collapse>

@@ -162,7 +162,7 @@ export default () => {
           flexDirection: "column",
         }}
       >
-        <div
+        {/* <div
           style={{
             display: "flex",
             padding: 20,
@@ -170,7 +170,7 @@ export default () => {
           }}
         >
           <Typography variant={"h3"}>Tile Assembly Editor</Typography>
-        </div>
+        </div> */}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ width: gridDim * tileSize, padding: 15 }}>
             <TileCanvas

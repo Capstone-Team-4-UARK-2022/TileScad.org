@@ -6,6 +6,7 @@ export default ({ label, value, onChange, isEditable = true }) => {
   return (
     <div style={{ padding: 5 }}>
       <TextField
+        style={{ backgroundColor: "white" }}
         id={label}
         label={label}
         // variant="outlined"
