@@ -84,26 +84,75 @@ const getTileSize = (gridDim) => {
   return Math.min(Math.max(Math.floor((width * 0.4) / gridDim), 50), 100);
 };
 
+const isNumber = (x) => {
+  return !(isNaN(x) || x == null);
+};
+
 const dataIsValid = ({ grid, tileTypes }) => {
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid.length; j++) {
-      // check north west neighbor of each tile
-      if (j > 0 && i > 1) {
-        const selfId = grid[i][j];
-        const northWestId = grid[i - 1][j - 1];
-        if (
-          !isNaN(selfId) &&
-          selfId != null &&
-          !isNaN(northWestId) &&
-          northWestId != null
-        ) {
-          const tile = tileTypes[selfId];
-          const northWestNeighbor = tileTypes[northWestId];
-          if (tile.coreLength != northWestNeighbor.coreLength) return false;
+  // check diagonals starting on bottom of board
+  for (let colIdx = 0; colIdx < grid.length; colIdx++) {
+    let i = grid.length - 1;
+    let j = colIdx;
+    let coreLength = null;
+    // currently at location i, j
+    // console.log("checking right col", i, j);
+
+    // while on board
+    while (j >= 0 && i >= 0) {
+      const selfId = grid[i][j];
+
+      // if core length exists and is different, return false
+      if (
+        isNumber(selfId) &&
+        tileTypes[selfId] &&
+        isNumber(tileTypes[selfId].coreLength)
+      ) {
+        if (coreLength == null) {
+          coreLength = tileTypes[selfId].coreLength;
+          // console.log("core length", coreLength);
+        } else if (coreLength != tileTypes[selfId].coreLength) {
+          return false;
         }
       }
+
+      // go to northwest neighbor
+      i--;
+      j--;
     }
   }
+
+  // check diagonals starting on right side of board
+  for (let rowIdx = 0; rowIdx < grid.length; rowIdx++) {
+    let i = rowIdx;
+    let j = grid.length - 1;
+    let coreLength = null;
+
+    // currently at location i, j
+    // console.log("checking right col", i, j);
+
+    while (j >= 0 && i >= 0) {
+      const selfId = grid[i][j];
+
+      // if core length exists and is different, return false
+      if (
+        isNumber(selfId) &&
+        tileTypes[selfId] &&
+        isNumber(tileTypes[selfId].coreLength)
+      ) {
+        if (coreLength == null) {
+          coreLength = tileTypes[selfId].coreLength;
+          // console.log("core length", coreLength);
+        } else if (coreLength != tileTypes[selfId].coreLength) {
+          return false;
+        }
+      }
+
+      // go to northwest neighbor
+      i--;
+      j--;
+    }
+  }
+
   return true;
 };
 
