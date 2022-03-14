@@ -37,6 +37,9 @@ def upload_design():
         if(not isinstance(grid, list) or not isinstance(grid[0], list) or len(grid) != len(grid[0])):
             return "Invalid data", 400
 
+        if(domain_length > 30 or len(grid) > 60 or len(tile_types) > 50):
+            return "Invalid data", 400
+
         canvas_dim = len(grid)
         # pprint(grid)
 
