@@ -156,21 +156,22 @@ const dataIsValid = ({ grid, tileTypes }) => {
   return true;
 };
 
-export default () => {
+export default ({ defaultGridData, defaultGridDim }) => {
   const [domainLength, setDomainLength] = useState(6);
   // either id (number) or null
   const [activeTileType, setActiveTileType] = useState(defaultActiveTileType);
 
   const [tileTypes, setTileTypes] = useState(defaultTileTypes);
 
-  const [gridDim, setGridDim] = useState(10);
+  const [gridDim, setGridDim] = useState(defaultGridDim || 10);
 
   const [gridData, setGridData] = useState(
-    [...Array(gridDim)].map((_, i) => {
-      return [...Array(gridDim)].map((_, j) => {
-        if (0 <= i && i < 2 && 0 <= j && j < 2) return tileTypes[0].id;
-      });
-    })
+    defaultGridData ||
+      [...Array(gridDim)].map((_, i) => {
+        return [...Array(gridDim)].map((_, j) => {
+          if (0 <= i && i < 2 && 0 <= j && j < 2) return tileTypes[0].id;
+        });
+      })
   );
 
   const [error, setError] = useState(false);

@@ -27,6 +27,7 @@ function BarNav() {
         <Navbar.Collapse>
           <Nav>
             <Nav.Link href="design">Design</Nav.Link>
+            <Nav.Link href="smiley-face">Demo</Nav.Link>
             <Nav.Link href="about">About</Nav.Link>
           </Nav>
         </Navbar.Collapse>
